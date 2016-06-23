@@ -1,0 +1,12 @@
+extends layout
+
+block title
+    title Home
+
+block content
+    .jumbotron
+        h1= title
+        p In order to get a brief display of this amazing #{appname}. Click on the button below.
+        a.btn.btn-primary(href="/news", role="button")
+            span.glyphicon.glyphicon-hand-right(aria-hidden="true")&nbsp;
+            | #{appname}

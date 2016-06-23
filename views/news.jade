@@ -1,0 +1,49 @@
+extends layout
+
+block title
+    title News Feed
+
+block content
+    h1= title
+    p Welcome to this amazing #{title}.
+
+    .panel.panel-primary
+        .panel-heading
+            ul.nav.nav-pills
+                li.active(role="presentation")
+                    a(class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseNewsFeed" aria-expanded="false" aria-controls="collapseNewsFeed")
+                        span.glyphicon.glyphicon-align-justify(aria-hidden="true")
+        .panel-body
+            #collapseNewsFeed.collapse
+                #accordion.panel-group(role="tablist", aria-multiselectable="true")
+                    - each item in items
+                        .panel.panel-default
+                            .panel-heading(role="tab", id="heading-#{item._id}")
+                                h4.panel-title
+                                    span.glyphicon.glyphicon-collapse-down
+                                    &nbsp;
+                                    a(role="button", data-toggle="collapse", data-parent="#accordion", href="#collapse-#{item._id}", aria-expanded="false", aria-controls="collapse-#{item._id}")
+                                        = item.title
+                            .panel-collapse.collapse(role="tabpanel", aria-labelledby="heading-#{item._id}", id="collapse-#{item._id}")
+                                .panel-body
+                                    .media-list
+                                        .media
+                                            .media-left.media-middle
+                                                img.img-responsive.media-object.img-thumbnail(src="#{item.image}", alt="#{item.title}")
+                                            .media-body
+                                                = item.content
+                                                
+                            script.
+                                // Iteration by ID through the collapse panel.
+                                $("#collapse-#{item._id}").on("shown.bs.collapse", function() {
+                                    // It finds the glyphicon based on the previous element and then updates it.
+                                    $(this).prev().find("span.glyphicon-collapse-down").removeClass("glyphicon-collapse-down").addClass("glyphicon-collapse-up");
+                                    // Add a new li element into nav-pills, then appends the respect collapse title and sets a class.
+                                    $(".nav-pills").append($("<li>").append("#{item.title}").addClass("panel-heading-collpased"));
+                                });
+                                $("#collapse-#{item._id}").on("hidden.bs.collapse", function() {
+                                    // It finds the glyphicon based on the previous element and then updates it.
+                                    $(this).prev().find("span.glyphicon-collapse-up").removeClass("glyphicon-collapse-up").addClass("glyphicon-collapse-down");
+                                    // It removes the li element (collapse title) from the nav-pills when the collapse is hidden.
+                                    $(".nav-pills .panel-heading-collpased").remove();
+                                });
